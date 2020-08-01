@@ -1,23 +1,23 @@
 extends KinematicBody2D
 
-
-# Declare member variables here. Examples:
-# var a = 2
-# var b = "text"
-
-const SPEED = 100
+const SPEED = 50
 const SHOT_SCENE = preload("res://shot/Shot.tscn")
 
-# Called when the node enters the scene tree for the first time.
+var motion = Vector2.ZERO
+
 func _ready():
 	pass
 
-
-# Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta):
-	
-	var motion = Vector2.ZERO
+	get_input()
+	look_at(get_global_mouse_position())
+	update_camera()
+	move_and_slide(motion)
+
+func get_input():
 	var sprite = get_node("AnimatedSprite")
+
+	motion = Vector2.ZERO
 	
 	if Input.is_action_pressed("up") and Input.is_action_pressed("down") == false:
 		motion.y = -SPEED
@@ -33,12 +33,15 @@ func _process(delta):
 		sprite.animation = "idle"
 	else:
 		sprite.animation = "move"
-	move_and_slide(motion)
-	
+
 	if Input.is_action_just_pressed("shoot"):
 		var shot_scene = SHOT_SCENE.instance()
 		get_tree().root.add_child(shot_scene)
-		shot_scene.vector = position.direction_to(get_global_mouse_position()).normalized()
-		shot_scene.position = self.duplicate().position
-			
-	look_at(get_global_mouse_position())
+		shot_scene.vector = global_position.direction_to(get_global_mouse_position()).normalized()
+		shot_scene.global_position = global_position
+
+func update_camera():
+	#var xf = player.gettransform()
+	#camera.settransform(xf)
+	var camera = get_node("Camera2D")
+	camera.rotation_degrees = rotation_degrees
