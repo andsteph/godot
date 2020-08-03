@@ -1,18 +1,24 @@
 extends KinematicBody2D
 
+
 const SPEED = 50
 const SHOT_SCENE = preload("res://shot/Shot.tscn")
 
 var motion = Vector2.ZERO
+var keys = {
+	"RedGate" : false,
+	"GreenGate" : false,
+	"BlueGate" : false
+}
 
-func _ready():
-	pass
 
 func _process(delta):
 	get_input()
 	look_at(get_global_mouse_position())
 	update_camera()
-	move_and_slide(motion)
+	var collision = move_and_collide(motion.normalized()*SPEED*delta)
+	gate_check(collision)
+
 
 func get_input():
 	var sprite = get_node("AnimatedSprite")
@@ -40,8 +46,29 @@ func get_input():
 		shot_scene.vector = global_position.direction_to(get_global_mouse_position()).normalized()
 		shot_scene.global_position = global_position
 
+
 func update_camera():
-	#var xf = player.gettransform()
-	#camera.settransform(xf)
 	var camera = get_node("Camera2D")
 	camera.rotation_degrees = rotation_degrees
+
+
+func gate_check(collision):
+	if collision:
+		var collider = collision.get_collider()
+		var collider_name = collider.get_name()
+		if collider_name == "RedGate" or collider_name == "GreenGate" or collider_name == "BlueGate":
+			if keys[collider_name]:
+				collider.queue_free()
+		else:
+			print(collider)
+
+
+func item_grabbed(item):
+	var node_name = item.get_name()
+	item.queue_free()
+	if node_name == 'RedKey':
+		keys['RedGate'] = true
+	elif node_name == 'GreenKey':
+		keys['GreenGate'] = true
+	elif node_name == 'GreenKey':
+		keys['GreenGate'] = true

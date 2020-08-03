@@ -13,7 +13,7 @@ region = Rect2( 0, 0, 8, 8 )
 
 [sub_resource type="AtlasTexture" id=3]
 atlas = ExtResource( 1 )
-region = Rect2( 8, 0, 8, 8 )
+region = Rect2( 16, 0, 8, 8 )
 
 [sub_resource type="AtlasTexture" id=4]
 atlas = ExtResource( 1 )
@@ -21,7 +21,7 @@ region = Rect2( 0, 0, 8, 8 )
 
 [sub_resource type="AtlasTexture" id=5]
 atlas = ExtResource( 1 )
-region = Rect2( 16, 0, 8, 8 )
+region = Rect2( 8, 0, 8, 8 )
 
 [sub_resource type="SpriteFrames" id=6]
 animations = [ {
@@ -32,12 +32,12 @@ animations = [ {
 }, {
 "frames": [ SubResource( 2 ), SubResource( 3 ) ],
 "loop": true,
-"name": "move",
+"name": "hit",
 "speed": 30.0
 }, {
 "frames": [ SubResource( 4 ), SubResource( 5 ) ],
 "loop": true,
-"name": "hit",
+"name": "move",
 "speed": 30.0
 } ]
 
@@ -47,7 +47,7 @@ height = 1.13544
 
 [node name="Player" type="KinematicBody2D"]
 z_index = 1
-collision_mask = 6
+collision_mask = 2147483662
 script = ExtResource( 2 )
 __meta__ = {
 "_edit_group_": true
